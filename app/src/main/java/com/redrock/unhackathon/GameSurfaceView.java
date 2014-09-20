@@ -19,6 +19,7 @@ import java.util.ArrayList;
  */
 public class GameSurfaceView extends SurfaceView {
 
+    // Making a comment here.
     private Bitmap bmp;
     private CollisionMan sprite;
     private ArrayList<CollisionMan> sprites;
