@@ -1,6 +1,7 @@
 package com.redrock.unhackathon;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,14 +9,17 @@ import android.view.MenuItem;
 
 public class MyActivity extends Activity {
 
+    FragmentManager fManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         GameSurfaceView gameSurfaceView = new GameSurfaceView(getApplicationContext());
         setContentView(R.layout.activity_my);
+        fManager = getFragmentManager();
         
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

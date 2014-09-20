@@ -16,6 +16,14 @@ import android.view.View;
  */
 public class CollisionMan {
 
+/*
+====================================================================================================
+=================================       Constants/Variables     ====================================
+====================================================================================================
+ */
+
+    private static final int MAX_VELOCITY = 10;
+
     /**
      * Sprite's current x position.
      */
@@ -27,6 +35,16 @@ public class CollisionMan {
     private int y;
 
     /**
+     * Horizontal velocity of the sprite.
+     */
+    private int xSpeed;
+
+    /**
+     * Vertical velocity of the sprite.
+     */
+    private int ySpeed;
+
+    /**
      * Bitmap for sprite rendering.
      */
     private Bitmap bmp;
@@ -35,6 +53,12 @@ public class CollisionMan {
      * View in which the sprite is located.
      */
     private View view;
+
+/*
+====================================================================================================
+====================================       Constructors     ========================================
+====================================================================================================
+ */
 
     /**
      * Takes a view object and a bitmap image and initializes a new sprite with these values.
@@ -50,8 +74,13 @@ public class CollisionMan {
         view = initView;
         bmp = initBmp;
 
-
     }
+
+/*
+====================================================================================================
+===================================       Instance Methods     =====================================
+====================================================================================================
+ */
 
     /**
      * Draws the bitmap on the canvas as the sprite's current x and y position.
@@ -61,7 +90,57 @@ public class CollisionMan {
      */
     public void onDraw(Canvas canvas) {
 
+        update();
         canvas.drawBitmap(bmp, x, y, null);
+
+    }
+
+    /**
+     * Update the sprites position in the view based on its current speed. If the
+     */
+    private void update() {
+
+        // The sprite has collided with the view boundary (sides).
+        if ((x <= 0 + xSpeed) || (x >= view.getWidth() - bmp.getWidth() - xSpeed)) {
+
+            xSpeed = -xSpeed;
+
+        }
+
+        // The sprite has collided with the view boundary (top/bottom).
+        if ((y <= 0 + ySpeed) || (y >= view.getHeight() - bmp.getHeight() - ySpeed)) {
+
+            ySpeed = -ySpeed;
+
+        }
+
+        // Update the position of the sprite.
+        x = x + xSpeed;
+        y = y + ySpeed;
+
+    }
+
+    private boolean underMaxSpeed(int checkX, int checkY) {
+
+        return Math.sqrt(checkX * checkX + checkY * checkY) <= MAX_VELOCITY;
+
+    }
+
+/*
+====================================================================================================
+====================================       Getters/Setters     =====================================
+====================================================================================================
+ */
+
+    /**
+     * Public getter method for the horizontal position of the sprite.
+     *
+     * @return
+     *          The value of the horizontal position of the sprite.
+     */
+    public int getX() {
+
+        return x;
 
     }
 
@@ -83,6 +162,18 @@ public class CollisionMan {
     }
 
     /**
+     * Public getter method for the vertical position of the sprite.
+     *
+     * @return
+     *          The value of the vertical position of the sprite.
+     */
+    public int getY() {
+
+        return y;
+
+    }
+
+    /**
      * Public setter method for the sprite's y coordinate. Only updates the y variable if the newY
      * parameter is within the valid View range (greater than 0, less than View.getHeight().
      *
@@ -94,6 +185,90 @@ public class CollisionMan {
         if (newY > 0 && newY < view.getHeight()){
 
             y = newY;
+
+        }
+
+    }
+
+    /**
+     * Public getter method for the magnitude of the velocity for the sprite. Returns the square
+     * root of the squares of the horizontal and vertical velocities.
+     *
+     * @return
+     *          The total speed of the sprite: the square root of the squares of the horizontal and
+     *          vertical velocities.
+     */
+    public int getSpeed() {
+
+        return (int) Math.sqrt(xSpeed * xSpeed + ySpeed * ySpeed);
+
+    }
+
+    /**
+     * Convenience setter method for the horizontal and vertical speeds of the sprite.
+     *
+     * @param newxSpeed
+     *          The new horizontal speed of the sprite.
+     *
+     * @param newySpeed
+     *          The new vertical speed of the sprite.
+     */
+    public void setSpeed(int newxSpeed, int newySpeed) {
+
+        setxSpeed(newxSpeed);
+        setySpeed(newySpeed);
+
+    }
+
+    /**
+     * Public getter method for the horizontal velocity of the sprite.
+     *
+     * @return
+     *          The value of the horizontal velocity of the sprite.
+     */
+    public int getxSpeed() {
+
+        return xSpeed;
+
+    }
+
+    /**
+     * Public getter for the horizontal velocity of the sprite. Value will only be updated if the
+     * new value will keep the sprite under the maximum speed.
+     *
+     * @param newxSpeed
+     *          Value to set the horizontal speed of the sprite to.
+     */
+    public void setxSpeed(int newxSpeed) {
+
+        xSpeed = newxSpeed;
+
+    }
+
+    /**
+     * Public getter method for the vertical velocity of the sprite.
+     *
+     * @return
+     *          The value of the vertical velocity of the sprite.
+     */
+    public int getySpeed() {
+
+        return ySpeed;
+
+    }
+
+    /**
+     * Public getter for the vertical velocity of the sprite. Value will only be updated if the
+     * new value will keep the sprite under the maximum speed.
+     *
+     * @param newySpeed
+     *          Value to set the vertical speed of the sprite to.
+     */
+    public void setySpeed(int newySpeed) {
+
+        if (underMaxSpeed(x, newySpeed)) {
+
+            ySpeed = newySpeed;
 
         }
 
