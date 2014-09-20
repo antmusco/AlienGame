@@ -22,6 +22,9 @@ public class CollisionMan {
 ====================================================================================================
  */
 
+    /**
+     * Maximum total speed of the sprite.
+     */
     private static final int MAX_VELOCITY = 10;
 
     /**
@@ -47,7 +50,7 @@ public class CollisionMan {
     /**
      * Bitmap for sprite rendering.
      */
-    private Bitmap bmp;
+    private Bitmap spriteBitmap;
 
     /**
      * View in which the sprite is located.
@@ -72,7 +75,7 @@ public class CollisionMan {
     public CollisionMan (View initView, Bitmap initBmp) {
 
         view = initView;
-        bmp = initBmp;
+        spriteBitmap = initBmp;
 
     }
 
@@ -91,7 +94,7 @@ public class CollisionMan {
     public void onDraw(Canvas canvas) {
 
         update();
-        canvas.drawBitmap(bmp, x, y, null);
+        canvas.drawBitmap(spriteBitmap, x, y, null);
 
     }
 
@@ -101,14 +104,14 @@ public class CollisionMan {
     private void update() {
 
         // The sprite has collided with the view boundary (sides).
-        if ((x <= 0 + xSpeed) || (x >= view.getWidth() - bmp.getWidth() - xSpeed)) {
+        if ((x <= 0 + xSpeed) || (x >= view.getWidth() - spriteBitmap.getWidth() - xSpeed)) {
 
             xSpeed = -xSpeed;
 
         }
 
         // The sprite has collided with the view boundary (top/bottom).
-        if ((y <= 0 + ySpeed) || (y >= view.getHeight() - bmp.getHeight() - ySpeed)) {
+        if ((y <= 0 + ySpeed) || (y >= view.getHeight() - spriteBitmap.getHeight() - ySpeed)) {
 
             ySpeed = -ySpeed;
 
@@ -131,6 +134,30 @@ public class CollisionMan {
 ====================================       Getters/Setters     =====================================
 ====================================================================================================
  */
+
+    /**
+     * Public getter method for the width of the sprite in pixels.
+     *
+     * @return
+     *          The value of the width of the sprite in pixels.
+     */
+    public int getWidth() {
+
+        return spriteBitmap.getWidth();
+
+    }
+
+    /**
+     * Public getter method for the height of the sprite in pixels.
+     *
+     * @return
+     *          The value of the height of the sprite in pixels.
+     */
+    public int getHeight() {
+
+        return spriteBitmap.getHeight();
+
+    }
 
     /**
      * Public getter method for the horizontal position of the sprite.

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -26,6 +27,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 ================================       Constants/Variables     =====================================
 ====================================================================================================
  */
+
+    Handler handler;
 
     /**
      * Background image for the view.
@@ -56,7 +59,6 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         construct();
 
     }
-
 
     public GameSurfaceView(Context context, AttributeSet attrs) {
 
@@ -91,8 +93,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         getHolder().addCallback(this);
         Bitmap spriteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.sprite_01);
         sprite = new CollisionMan(this, spriteBitmap);
-        sprite.setX(getWidth()/2);
-        sprite.setY(getHeight()/2);
+        handler = new Handler();
 
     }
 
@@ -121,6 +122,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     protected void onDraw(Canvas canvas) {
 
         canvas.drawBitmap(background, 0, 0, null);
+        sprite.setX((getWidth() - sprite.getWidth()) / 2);
+        sprite.setY((getHeight() - sprite.getHeight()) / 2);
         sprite.onDraw(canvas);
 
     }
