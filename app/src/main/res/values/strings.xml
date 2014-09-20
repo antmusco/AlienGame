@@ -4,5 +4,6 @@
     <string name="app_name">Unhackathon</string>
     <string name="hello_world">Hello again, Chris!</string>
     <string name="action_settings">Settings</string>
+    <string name="test_two">Testing Two</string>
 
 </resources>
