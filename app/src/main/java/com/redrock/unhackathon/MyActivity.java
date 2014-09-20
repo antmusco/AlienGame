@@ -13,6 +13,7 @@ public class MyActivity extends Activity {
         super.onCreate(savedInstanceState);
         GameSurfaceView gameSurfaceView = new GameSurfaceView(getApplicationContext());
         setContentView(R.layout.activity_my);
+        
     }
 
 

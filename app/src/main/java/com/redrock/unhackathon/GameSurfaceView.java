@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -25,6 +26,25 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private CollisionMan sprite;
     private ArrayList<CollisionMan> sprites;
 
+
+    public GameSurfaceView(Context context, AttributeSet attrs, Bitmap bmp) {
+        super(context, attrs);
+        this.bmp = bmp;
+    }
+
+
+
+
+    public GameSurfaceView(Context context, AttributeSet attrs, int defStyle, Bitmap bmp) {
+        super(context, attrs, defStyle);
+        this.bmp = bmp;
+    }
+
+
+    public GameSurfaceView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        this.bmp = bmp;
+    }
     public GameSurfaceView(Context context) {
 
         super(context);
@@ -56,6 +76,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     protected void onDraw(Canvas canvas) {
 
         canvas.drawBitmap(bmp, 0, 0, null);
+
         sprite.onDraw(canvas);
 
     }
