@@ -14,32 +14,22 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"/>
 
-    <SurfaceView
+    <GameSurfaceView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         />
 
     <!--
-        android:src="@drawable/tag-cloud-hackathon - Copy" -->
+        android:src="@drawable/tag-cloud-hackathon - Copy"
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
        android:src="@drawable/test"
-
-    />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_alignParentBottom="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:src="@drawable/SpriteSet_CollisionMan"
-
-      />
-    <!--android:imageView1.setImageResource(R.drawable.tag-cloud-hackathon - Copy);
+        />
+    android:imageView1.setImageResource(R.drawable.tag-cloud-hackathon - Copy);
+>>>>>>> 685ea27e5061630676667d9635ce8e875b954c87
     android: i.setAdjustViewBounds(true); // set the ImageView bounds to match the Drawable's dimensions
     android:i.setLayoutParams(new Gallery.LayoutParams(LayoutParams.WRAP_CONTENT,
     android:LayoutParams.WRAP_CONTENT)); / -->
