@@ -1,23 +1,42 @@
 package com.redrock.unhackathon;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
-
+/**
+ * Primary activity for the application.
+ */
 public class MyActivity extends Activity {
 
-    FragmentManager fManager;
+    /**
+     * Primary surface view for the game.
+     */
+    GameSurfaceView gameSurfaceView;
 
+    /**
+     * OnCreate method.
+     *
+     * @param savedInstanceState
+     *          Bundle which initializes the game with a saved instance state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        // Call the superclass constructor.
         super.onCreate(savedInstanceState);
-        GameSurfaceView gameSurfaceView = new GameSurfaceView(getApplicationContext());
+
+        // Remove the title and make the app fullscreen.
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+          WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        // Create the SurfaceView.
+        gameSurfaceView = new GameSurfaceView(getApplicationContext());
         setContentView(R.layout.activity_my);
-        fManager = getFragmentManager();
         
     }
 
@@ -39,4 +58,5 @@ public class MyActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

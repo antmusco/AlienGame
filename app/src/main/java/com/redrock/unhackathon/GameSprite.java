@@ -14,7 +14,7 @@ import android.view.View;
  * <dt><b>Date Created:</b></dd>
  *          9/20/2014
  */
-public class CollisionMan {
+public class GameSprite {
 
 /*
 ====================================================================================================
@@ -72,10 +72,14 @@ public class CollisionMan {
      * @param initBmp
      *          Bitmap image representation of the sprite.
      */
-    public CollisionMan (View initView, Bitmap initBmp) {
+    public GameSprite(View initView, Bitmap initBmp) {
 
         view = initView;
         spriteBitmap = initBmp;
+        x = 100;
+        y = 50;
+        xSpeed = 30;
+        ySpeed = 30;
 
     }
 
@@ -93,7 +97,7 @@ public class CollisionMan {
      */
     public void onDraw(Canvas canvas) {
 
-        update();
+        moveSprite();
         canvas.drawBitmap(spriteBitmap, x, y, null);
 
     }
@@ -101,17 +105,17 @@ public class CollisionMan {
     /**
      * Update the sprites position in the view based on its current speed. If the
      */
-    private void update() {
+    private void moveSprite() {
 
         // The sprite has collided with the view boundary (sides).
-        if ((x <= 0 + xSpeed) || (x >= view.getWidth() - spriteBitmap.getWidth() - xSpeed)) {
+        if ((x <= 0 - xSpeed) || (x >= view.getWidth() - spriteBitmap.getWidth() - xSpeed)) {
 
             xSpeed = -xSpeed;
 
         }
 
         // The sprite has collided with the view boundary (top/bottom).
-        if ((y <= 0 + ySpeed) || (y >= view.getHeight() - spriteBitmap.getHeight() - ySpeed)) {
+        if ((y <= 0 - ySpeed) || (y >= view.getHeight() - spriteBitmap.getHeight() - ySpeed)) {
 
             ySpeed = -ySpeed;
 

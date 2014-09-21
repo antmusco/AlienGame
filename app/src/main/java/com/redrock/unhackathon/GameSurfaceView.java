@@ -4,15 +4,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import java.util.ArrayList;
-
 /**
- * SurfaceView object which contains a collection of objects native to the CollisionMan game.
+ * SurfaceView object which contains a collection of objects native to the GameSprite game.
  * Includes a sprite (so far).
  *
  * @author
@@ -28,7 +25,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 ====================================================================================================
  */
 
-    Handler handler;
+    GameThread gameLoopThread;
+
+    SurfaceHolder holder;
+
+    private Canvas canvas;
 
     /**
      * Background image for the view.
@@ -38,7 +39,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     /**
      * Primary sprite to be rendered on in the view.
      */
-    private CollisionMan sprite;
+    private GameSprite sprite;
 
 /*
 ====================================================================================================
@@ -91,16 +92,52 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         // Allow this view to be its own callback.
         getHolder().addCallback(this);
-        Bitmap spriteBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.sprite_01);
-        sprite = new CollisionMan(this, spriteBitmap);
-        handler = new Handler();
+
+        // Decode the sprite image into a bitmap object.
+        Bitmap spriteBitmap = BitmapFactory.decodeResource(getResources(),
+          R.drawable.sprite_01);
+
+        // Create a new sprite for this game object.
+        sprite = new GameSprite(this, spriteBitmap);
+
+        // Create the primary GameThread for this view.
+        gameLoopThread = new GameThread(this);
+
+        // Initialize and set the SurfaceHolder.
+        holder = getHolder();
+        holder.addCallback(new SurfaceHolder.Callback(){
+
+            @Override
+            public void surfaceCreated(SurfaceHolder surfaceHolder) {
+
+                // Start and run the primary game loop
+                gameLoopThread.setRunning(true);
+                gameLoopThread.start();
+
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i2, int i3) {
+
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+
+                // Stop the game loop.
+                gameLoopThread.setRunning(false);
+
+            }
+        });
 
     }
+
 
     @Override
     public void surfaceCreated(SurfaceHolder arg0) {
 
-        Bitmap background = BitmapFactory.decodeResource(getResources(), R.drawable.test);
+        // Set background once the surface has been created.
+        Bitmap background = BitmapFactory.decodeResource(getResources(), R.drawable.game_background_01);
         float scale = (float) background.getHeight() / (float) getHeight();
         int newWidth = Math.round(background.getWidth() / scale);
         int newHeight = Math.round(background.getHeight() / scale);
@@ -121,9 +158,10 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     @Override
     protected void onDraw(Canvas canvas) {
 
+        // Draw the canvas.
         canvas.drawBitmap(background, 0, 0, null);
-        sprite.setX((getWidth() - sprite.getWidth()) / 2);
-        sprite.setY((getHeight() - sprite.getHeight()) / 2);
+
+        // Draw the sprite.
         sprite.onDraw(canvas);
 
     }
