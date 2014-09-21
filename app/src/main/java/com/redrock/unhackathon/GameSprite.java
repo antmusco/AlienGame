@@ -103,7 +103,8 @@ public class GameSprite {
     }
 
     /**
-     * Update the sprites position in the view based on its current speed. If the
+     * Update the sprites position in the view based on its current speed. If the sprite reaches a
+     * boundary, the speed is reversed, and the sprite "bounces" off of the boundary.
      */
     private void moveSprite() {
 
