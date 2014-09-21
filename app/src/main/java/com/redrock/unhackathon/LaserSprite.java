@@ -72,12 +72,18 @@ public class LaserSprite extends GameSprite{
 
     }
 
+    /**
+     * I'm a different user and I'm documenting too.
+     * @param bitmap
+     * @return
+     */
     private Bitmap rotateBitmap(Bitmap bitmap) {
 
         Bitmap source = getBitmap();
 
 
         Matrix matrix = new Matrix();
+        matrix.postRotate(40);
         //matrix.postTranslate(source.getHeight()/2, source.getWidth()/2);
         matrix.postRotate((float)angle);
         //matrix.postTranslate((float)getxSpeed(), (float)getySpeed());
