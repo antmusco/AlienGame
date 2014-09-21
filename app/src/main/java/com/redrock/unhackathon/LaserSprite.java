@@ -74,6 +74,7 @@ public class LaserSprite extends GameSprite{
 
     /**
      * I'm documenting this.
+     * I'm a different user and I'm documenting too.
      * @param bitmap
      * @return
      */
