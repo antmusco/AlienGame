@@ -1,7 +1,13 @@
 package com.redrock.unhackathon;
 
 import android.app.Activity;
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -9,13 +15,23 @@ import android.view.WindowManager;
 
 /**
  * Primary activity for the application.
+ *
+ * @author
+ *          Anthony G. Musco
+ *
+ * <dt><b>Date Created:</b></dd>
+ *          9/20/2014
  */
 public class MyActivity extends Activity {
 
     /**
      * Primary surface view for the game.
      */
-    GameSurfaceView gameSurfaceView;
+    private GameSurfaceView gameSurfaceView;
+
+    private SensorManager mSensorManager;
+
+    private Sensor mGravity;
 
     /**
      * OnCreate method.
@@ -33,11 +49,11 @@ public class MyActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
           WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mGravity = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
         // Create the SurfaceView.
-        gameSurfaceView = new GameSurfaceView(getApplicationContext());
         setContentView(R.layout.activity_my);
-        
+        gameSurfaceView = (GameSurfaceView) findViewById(R.id.viewGameSurface);
     }
 
     @Override
@@ -57,6 +73,24 @@ public class MyActivity extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+        mSensorManager.registerListener(gameSurfaceView, mGravity, SensorManager.SENSOR_DELAY_UI);
+
+        //gameSurfaceView.newGameThread();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        gameSurfaceView.getGameThread().interrupt();
+        mSensorManager.unregisterListener(gameSurfaceView);
     }
 
 }

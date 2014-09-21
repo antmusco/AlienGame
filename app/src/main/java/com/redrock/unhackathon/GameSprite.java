@@ -2,6 +2,7 @@ package com.redrock.unhackathon;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -14,7 +15,7 @@ import android.view.View;
  * <dt><b>Date Created:</b></dd>
  *          9/20/2014
  */
-public class GameSprite {
+public abstract class GameSprite {
 
 /*
 ====================================================================================================
@@ -23,29 +24,16 @@ public class GameSprite {
  */
 
     /**
-     * Maximum total speed of the sprite.
+     * Vector containing two double values, indicating the x-magnitude and y-magnitude of the
+     * position of the sprite.
      */
-    private static final int MAX_VELOCITY = 10;
+    private double[] position;
 
     /**
-     * Sprite's current x position.
+     * Vector containing two double values, indicating the x-magnitude and y-magnitude of the
+     * velocity of the sprite.
      */
-    private int x;
-
-    /**
-     * Sprite's current y position.
-     */
-    private int y;
-
-    /**
-     * Horizontal velocity of the sprite.
-     */
-    private int xSpeed;
-
-    /**
-     * Vertical velocity of the sprite.
-     */
-    private int ySpeed;
+    private double[] velocity;
 
     /**
      * Bitmap for sprite rendering.
@@ -56,6 +44,8 @@ public class GameSprite {
      * View in which the sprite is located.
      */
     private View view;
+
+    private int count = 0;
 
 /*
 ====================================================================================================
@@ -76,10 +66,8 @@ public class GameSprite {
 
         view = initView;
         spriteBitmap = initBmp;
-        x = 100;
-        y = 50;
-        xSpeed = 30;
-        ySpeed = 30;
+        position = new double[2];
+        velocity = new double[2];
 
     }
 
@@ -98,7 +86,7 @@ public class GameSprite {
     public void onDraw(Canvas canvas) {
 
         moveSprite();
-        canvas.drawBitmap(spriteBitmap, x, y, null);
+        canvas.drawBitmap(spriteBitmap, (int) position[0], (int) position[1], null);
 
     }
 
@@ -106,31 +94,28 @@ public class GameSprite {
      * Update the sprites position in the view based on its current speed. If the sprite reaches a
      * boundary, the speed is reversed, and the sprite "bounces" off of the boundary.
      */
-    private void moveSprite() {
+    public abstract void moveSprite();
 
-        // The sprite has collided with the view boundary (sides).
-        if ((x <= 0 - xSpeed) || (x >= view.getWidth() - spriteBitmap.getWidth() - xSpeed)) {
+    /**
+     * Method which applies gravitational acceleration to the sprite as the accelerometer reads
+     * in new values.
+     *
+     * @param values
+     *          Array of float values indicating the x [0], y [1], and z [2] vector values of
+     *          gravitational acceleration with respect to the accelerometer's coordinate system.
+     */
+    public void applyGravity(float[] values) {
 
-            xSpeed = -xSpeed;
+        double xMagnitude = values[1];
+        double yMagnitude = values[0];
 
-        }
+        double time = 10.0 / GameThread.FRAME_RATE;
 
-        // The sprite has collided with the view boundary (top/bottom).
-        if ((y <= 0 - ySpeed) || (y >= view.getHeight() - spriteBitmap.getHeight() - ySpeed)) {
+        velocity[0] = velocity[0] + (xMagnitude * time);
+        velocity[1] = velocity[1] + (yMagnitude * time);
 
-            ySpeed = -ySpeed;
-
-        }
-
-        // Update the position of the sprite.
-        x = x + xSpeed;
-        y = y + ySpeed;
-
-    }
-
-    private boolean underMaxSpeed(int checkX, int checkY) {
-
-        return Math.sqrt(checkX * checkX + checkY * checkY) <= MAX_VELOCITY;
+        //System.out.println(xMagnitude + " " + yMagnitude);
+        //System.out.println(velocity[0] + " " + velocity[1]);
 
     }
 
@@ -170,26 +155,21 @@ public class GameSprite {
      * @return
      *          The value of the horizontal position of the sprite.
      */
-    public int getX() {
+    public double getX() {
 
-        return x;
+        return position[0];
 
     }
 
     /**
-     * Public setter method for the sprite's x coordinate. Only updates the x variable if the newX
-     * parameter is within the valid View range (greater than 0, less than View.getWidth().
+     * Public setter method for the sprite's x coordinate.
      *
      * @param newX
      *          New x position on the View.
      */
-    public void setX(int newX) {
+    public void setX(double newX) {
 
-        if (newX > 0 && newX < view.getWidth()){
-
-            x = newX;
-
-        }
+        position[0] = newX;
 
     }
 
@@ -199,26 +179,21 @@ public class GameSprite {
      * @return
      *          The value of the vertical position of the sprite.
      */
-    public int getY() {
+    public double getY() {
 
-        return y;
+        return position[1];
 
     }
 
     /**
-     * Public setter method for the sprite's y coordinate. Only updates the y variable if the newY
-     * parameter is within the valid View range (greater than 0, less than View.getHeight().
+     * Public setter method for the sprite's y coordinate.
      *
      * @param newY
      *          New x position on the View.
      */
-    public void setY(int newY) {
+    public void setY(double newY) {
 
-        if (newY > 0 && newY < view.getHeight()){
-
-            y = newY;
-
-        }
+        position[1] = newY;
 
     }
 
@@ -230,25 +205,25 @@ public class GameSprite {
      *          The total speed of the sprite: the square root of the squares of the horizontal and
      *          vertical velocities.
      */
-    public int getSpeed() {
+    public double getSpeed() {
 
-        return (int) Math.sqrt(xSpeed * xSpeed + ySpeed * ySpeed);
+        return Math.sqrt(velocity[0] * velocity[0] + velocity[1] * velocity[1]);
 
     }
 
     /**
      * Convenience setter method for the horizontal and vertical speeds of the sprite.
      *
-     * @param newxSpeed
+     * @param xSpeed
      *          The new horizontal speed of the sprite.
      *
-     * @param newySpeed
+     * @param ySpeed
      *          The new vertical speed of the sprite.
      */
-    public void setSpeed(int newxSpeed, int newySpeed) {
+    public void setSpeed(double xSpeed, double ySpeed) {
 
-        setxSpeed(newxSpeed);
-        setySpeed(newySpeed);
+        velocity[0] = xSpeed;
+        velocity[1] = ySpeed;
 
     }
 
@@ -258,22 +233,23 @@ public class GameSprite {
      * @return
      *          The value of the horizontal velocity of the sprite.
      */
-    public int getxSpeed() {
+    public double getxSpeed() {
 
-        return xSpeed;
+        return velocity[0];
 
     }
 
     /**
-     * Public getter for the horizontal velocity of the sprite. Value will only be updated if the
-     * new value will keep the sprite under the maximum speed.
+     * Public getter for the horizontal velocity of the sprite.
      *
-     * @param newxSpeed
+     * @param xSpeed
      *          Value to set the horizontal speed of the sprite to.
      */
-    public void setxSpeed(int newxSpeed) {
+    public void setxSpeed(double xSpeed) {
 
-        xSpeed = newxSpeed;
+
+        velocity[0] = xSpeed;
+
 
     }
 
@@ -283,27 +259,57 @@ public class GameSprite {
      * @return
      *          The value of the vertical velocity of the sprite.
      */
-    public int getySpeed() {
+    public double getySpeed() {
 
-        return ySpeed;
+        return velocity[1];
 
     }
 
     /**
-     * Public getter for the vertical velocity of the sprite. Value will only be updated if the
-     * new value will keep the sprite under the maximum speed.
+     * Public getter for the vertical velocity of the sprite.
      *
-     * @param newySpeed
+     * @param ySpeed
      *          Value to set the vertical speed of the sprite to.
      */
-    public void setySpeed(int newySpeed) {
+    public void setySpeed(double ySpeed) {
 
-        if (underMaxSpeed(x, newySpeed)) {
-
-            ySpeed = newySpeed;
-
-        }
+        velocity[1] = ySpeed;
 
     }
 
+    /**
+     * Public getter for the sprite image.
+     *
+     * @return
+     *          The sprite image.
+     */
+    public Bitmap getBitmap() {
+
+        return spriteBitmap;
+
+    }
+
+    /**
+     * Public setter for the sprite image.
+     *
+     * @param bitmap
+     *          Value to set the sprite image to.
+     */
+    public void setBitmap(Bitmap bitmap) {
+
+        spriteBitmap = bitmap;
+
+    }
+
+    /**
+     * Public getter for the view of this sprite.
+     *
+     * @return
+     *          The sprite view.
+     */
+    public View getView() {
+
+        return view;
+
+    }
 }

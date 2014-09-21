@@ -30,7 +30,7 @@ public class GameThread extends Thread {
     /**
      * Frame rate of the thread indicated in frames per second.
      */
-    int frameRate = 10;
+    public static final int FRAME_RATE = 40;
 
     /**
      * Constructor for the game thread. Sets the view in which the thread is running and initializes
@@ -60,7 +60,7 @@ public class GameThread extends Thread {
                 gameView.postInvalidate();
 
                 // Sleep.
-                sleep(1000/frameRate);
+                sleep(1000/FRAME_RATE);
 
             } catch (InterruptedException e) {
 
