@@ -135,7 +135,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
 
                 // Start and run the primary game loop
-                gameLoopThread.setRunning(true);
+                gameLoopThread.setGameState(GameState.RUNNING);
                 gameLoopThread.start();
 
 
@@ -150,7 +150,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
 
                 // Stop the game loop.
-                gameLoopThread.setRunning(false);
+                gameLoopThread.setGameState(GameState.OVER);
 
             }
         });

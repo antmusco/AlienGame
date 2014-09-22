@@ -17,15 +17,8 @@ public class GameThread extends Thread {
      */
     GameSurfaceView gameView;
 
-    /**
-     * Flag indicating whether the thread is running or not.
-     */
-    boolean running = true;
-
-    /**
-     * Time the thread began in milliseconds.
-     */
-    long startTime = 0;
+    boolean die = false;
+    private GameState gameState;
 
     /**
      * Frame rate of the thread indicated in frames per second.
@@ -42,7 +35,6 @@ public class GameThread extends Thread {
     public GameThread(GameSurfaceView initGameView) {
 
         gameView = initGameView;
-        startTime = System.currentTimeMillis();
 
     }
 
@@ -52,28 +44,51 @@ public class GameThread extends Thread {
     @Override
     public void run() {
 
-        while (running) {
+        while(!die) {
 
-            try {
+            switch (gameState) {
 
-                // Update the game graphics.
-                gameView.postInvalidate();
+                case RUNNING:
 
-                // Sleep.
-                sleep(1000/FRAME_RATE);
+                    try {
 
-            } catch (InterruptedException e) {
+                        long startTime = System.currentTimeMillis();
 
-                e.printStackTrace();
+                        // Update the game graphics.
+                        gameView.postInvalidate();
+
+                        long timeDifference = System.currentTimeMillis() - startTime;
+                        long sleepTime = (1000 / FRAME_RATE) - timeDifference;
+
+                        // Sleep.
+                        sleep(sleepTime > 0 ? sleepTime : 0);
+
+                    } catch (InterruptedException e) {
+
+                        e.printStackTrace();
+
+                    }
+                    break;
+
+                case PAUSED:
+
+                    // Do nothing
+                    break;
+
+                case OVER:
+
+                    die = true;
+                    break;
 
             }
 
         }
+
     }
 
-    public void setRunning(boolean newRunning) {
+    public void setGameState(GameState setState) {
 
-        running = newRunning;
+        gameState = setState;
 
     }
 }

@@ -33,7 +33,7 @@ public class LaserSprite extends GameSprite{
 
     public LaserSprite(View initView, double posX, double posY, double velX, double velY) {
 
-        super(initView, BitmapFactory.decodeResource(initView.getResources(), R.drawable.laser_01));
+        super(initView, BitmapFactory.decodeResource(initView.getResources(), R.drawable.laser_02));
         setX(posX); setY(posY);
         setSpeed(velX, velY);
         angle = Math.atan(velY/velX) * DEGREE_PER_RAD;

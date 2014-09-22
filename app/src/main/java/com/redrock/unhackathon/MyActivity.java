@@ -81,6 +81,7 @@ public class MyActivity extends Activity {
 
         super.onResume();
         mSensorManager.registerListener(gameSurfaceView, mGravity, SensorManager.SENSOR_DELAY_UI);
+        gameSurfaceView.getGameThread().setGameState(GameState.RUNNING);
 
         //gameSurfaceView.newGameThread();
 
@@ -89,7 +90,7 @@ public class MyActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        gameSurfaceView.getGameThread().interrupt();
+        gameSurfaceView.getGameThread().setGameState(GameState.PAUSED);
         mSensorManager.unregisterListener(gameSurfaceView);
     }
 
