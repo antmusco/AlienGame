@@ -35,6 +35,13 @@ public class AlienSprite extends GameSprite implements View.OnTouchListener {
 
     }
 
+    /**
+     * Adding documentation.
+     * @param view
+     * @param x
+     * @param y
+     * @return
+     */
     public LaserSprite shootLaser(View view, double x, double y) {
 
         double delX = x - getX();
@@ -42,7 +49,7 @@ public class AlienSprite extends GameSprite implements View.OnTouchListener {
 
         double scale = LaserSprite.VELOCITY / Math.hypot(delX, delY);
 
-        return new LaserSprite(view, getX(), getY(), delX * scale, delY * scale );
+        return new LaserSprite(view, this, delX * scale, delY * scale );
 
     }
 

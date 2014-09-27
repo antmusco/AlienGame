@@ -15,7 +15,6 @@ public class LaserSprite extends GameSprite{
     public static final double DEGREE_PER_RAD = 57.2958;
     private static final int MAX_COUNT = 15;
 
-
     private double angle;
     private int count;
 
@@ -31,21 +30,15 @@ public class LaserSprite extends GameSprite{
 
     }
 
-    public LaserSprite(View initView, double posX, double posY, double velX, double velY) {
+    public LaserSprite(View initView, AlienSprite shooter, double velX, double velY) {
 
-        super(initView, BitmapFactory.decodeResource(initView.getResources(), R.drawable.laser_02));
-        setX(posX); setY(posY);
+        super(initView, BitmapFactory.decodeResource(initView.getResources(), R.drawable.laser_01));
+        int x = (int) (shooter.getX() - (getBitmap().getWidth() / 2));
+        int y = (int) (shooter.getY() - (getBitmap().getHeight() / 2));
+        setX(x); setY(y);
         setSpeed(velX, velY);
         angle = Math.atan(velY/velX) * DEGREE_PER_RAD;
         count = 0;
-
-    }
-
-    private void createMatrix(double angle, double velX, double velY) {
-
-        Matrix matrix = new Matrix();
-        matrix.postRotate((float) angle);
-        matrix.postTranslate((float)velX, (float)velY);
 
     }
 
@@ -68,7 +61,7 @@ public class LaserSprite extends GameSprite{
     public void onDraw(Canvas canvas) {
 
         moveSprite();
-        canvas.drawBitmap(rotateBitmap(getBitmap()),(float)getX(),(float)getY(),null);
+        canvas.drawBitmap(orientLaser(getBitmap()),(float)getX(),(float)getY(),null);
 
     }
 
@@ -77,16 +70,14 @@ public class LaserSprite extends GameSprite{
      * @param bitmap
      * @return
      */
-    private Bitmap rotateBitmap(Bitmap bitmap) {
+    private Bitmap orientLaser (Bitmap bitmap) {
 
         Bitmap source = getBitmap();
 
 
         Matrix matrix = new Matrix();
-        matrix.postRotate(40);
-        //matrix.postTranslate(source.getHeight()/2, source.getWidth()/2);
         matrix.postRotate((float)angle);
-        //matrix.postTranslate((float)getxSpeed(), (float)getySpeed());
+        matrix.postTranslate((float)getxSpeed(), (float)getySpeed());
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
 
     }

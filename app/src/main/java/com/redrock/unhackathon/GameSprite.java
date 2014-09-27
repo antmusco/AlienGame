@@ -106,8 +106,8 @@ public abstract class GameSprite {
      */
     public void applyGravity(float[] values) {
 
-        double xMagnitude = values[1];
-        double yMagnitude = values[0];
+        double xMagnitude = values[1] * 2;
+        double yMagnitude = values[0] * 2;
 
         double time = 10.0 / GameThread.FRAME_RATE;
 
